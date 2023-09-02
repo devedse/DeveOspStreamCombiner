@@ -1,0 +1,92 @@
+﻿@using DeveOspStreamCombiner.Data;
+@using System.Net.Http.Json
+@inject HttpClient Http
+@page "/{SkipUserName?}"
+
+<PageTitle>DeveOspStreamCombiner</PageTitle>
+
+<div class="page container-fluid">
+    <div class="row">
+        @foreach (var channel in Channels)
+        {
+            var gridClass = GetBootstrapGridClass(Channels.Count);
+            <div class="@gridClass">
+                <div class="stream-container">
+                    <iframe src=@($"https://osp.devedse.duckdns.org/view/{channel.channelEndpointID}/?embedded=True&autoplay=True")></iframe>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? SkipUserName { get; set; }
+
+    private List<StreamChannel> Channels { get; set; } = new List<StreamChannel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var response = await Http.GetFromJsonAsync<StreamChannels>("https://osp.devedse.duckdns.org/apiv1/channel/activeChannels");
+        if (response?.results?.Any() ?? false)
+        {
+            Channels = response.results.Where(channel => channel.owningUsername != SkipUserName).ToList();
+        }
+    }
+
+    private string GetBootstrapGridClass(int totalStreams)
+    {
+        switch (totalStreams)
+        {
+            case 1:
+                return "col-12"; // Full width
+            case 2:
+                return "col-6"; // Half width, 2 items per row
+            case 3:
+            case 4:
+                return "col-6 col-md-4"; // 2 items per row on small screens, 3 items per row on medium and above
+            default:
+                return "col-6 col-md-4 col-lg-3"; // As the number of streams grows, adjust the classes accordingly.
+        }
+    }
+}
+
+<style>
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #000;
+    }
+
+    .page {
+        height: 100%;
+    }
+
+    .container-fluid, .row, .col-12, .col-6, .col-md-4, .col-lg-3 {
+        min-height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .stream-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+
+        .stream-container iframe {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            width: calc(100% + 16px);
+            height: calc(100% + 16px);
+            border: none;
+        }
+
+
+</style>
