@@ -6,7 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>bc2032c3-21ab-4396-88ea-8e37ea6219de</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <ApplicationIcon>DeveOspStreamCombiner.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="DeveOspStreamCombiner.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />

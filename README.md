@@ -1,5 +1,7 @@
 # DeveOspStreamCombiner
-This is a Frontend application to allow for viewing multiple streams at once on OpenStreamingPlatform
+This is a Frontend application to allow for viewing multiple streams at once on OpenStreamingPlatform. You can host this at a specific url and then browse to `{url}/Devedse` this would show all streams on the OSP platform except the ones from Devedse.
+
+![Screenshot](Screenshot.png)
 
 ## Docker-Compose.yml
 
