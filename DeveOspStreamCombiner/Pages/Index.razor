@@ -32,7 +32,7 @@
     {
         _ospUrl = Configuration.GetValue<string>("OspUrl") ?? throw new InvalidOperationException("Could not find setting: OspUrl. Please ensure this is filled in in the Environment Variables");
 
-        var response = await Http.GetFromJsonAsync<StreamChannels>("https://osp.devedse.duckdns.org/apiv1/channel/activeChannels");
+        var response = await Http.GetFromJsonAsync<StreamChannels>($"{_ospUrl}/apiv1/channel/activeChannels");
         if (response?.results?.Any() ?? false)
         {
             var skipUsernamesSplit = SkipUserNames?.Split(",", StringSplitOptions.RemoveEmptyEntries) ?? new string[] { };
