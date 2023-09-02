@@ -1,7 +1,8 @@
 ﻿@using DeveOspStreamCombiner.Data;
 @using System.Net.Http.Json
 @inject HttpClient Http
-@page "/{SkipUserName?}"
+@inject IConfiguration Configuration
+@page "/{SkipUserNames?}"
 
 <PageTitle>DeveOspStreamCombiner</PageTitle>
 
@@ -12,7 +13,7 @@
             var gridClass = GetBootstrapGridClass(Channels.Count);
             <div class="@gridClass">
                 <div class="stream-container">
-                    <iframe src=@($"https://osp.devedse.duckdns.org/view/{channel.channelEndpointID}/?embedded=True&autoplay=True")></iframe>
+                    <iframe src=@($"{_ospUrl}view/{channel.channelEndpointID}/?embedded=True&autoplay=True")></iframe>
                 </div>
             </div>
         }
@@ -21,17 +22,21 @@
 
 @code {
     [Parameter]
-    public string? SkipUserName { get; set; }
+    public string? SkipUserNames { get; set; }
 
+    private string _ospUrl { get; set; }
     private List<StreamChannel> Channels { get; set; } = new List<StreamChannel>();
+
 
     protected override async Task OnInitializedAsync()
     {
+        _ospUrl = Configuration.GetValue<string>("OspUrl") ?? throw new InvalidOperationException("Could not find setting: OspUrl. Please ensure this is filled in in the Environment Variables");
 
         var response = await Http.GetFromJsonAsync<StreamChannels>("https://osp.devedse.duckdns.org/apiv1/channel/activeChannels");
         if (response?.results?.Any() ?? false)
         {
-            Channels = response.results.Where(channel => channel.owningUsername != SkipUserName).ToList();
+            var skipUsernamesSplit = SkipUserNames?.Split(",", StringSplitOptions.RemoveEmptyEntries) ?? new string[] { };
+            Channels = response.results.Where(channel => skipUsernamesSplit.All(t => !string.Equals(channel.owningUsername, t, StringComparison.OrdinalIgnoreCase))).ToList();
         }
     }
 
@@ -87,6 +92,5 @@
             height: calc(100% + 16px);
             border: none;
         }
-
 
 </style>
