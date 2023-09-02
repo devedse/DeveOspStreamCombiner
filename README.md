@@ -1,7 +1,20 @@
 # DeveOspStreamCombiner
 This is a Frontend application to allow for viewing multiple streams at once on OpenStreamingPlatform
 
+## Docker-Compose.yml
 
+```
+version: '3'
+
+services:
+  deveospstreamcombiner:
+    image: devedse/deveospstreamcombiner:latest
+    restart: unless-stopped
+    environment:
+      - OspUrl=https://osp.devedse.duckdns.org/
+    ports:
+      - '5006:80'
+```
 
 ## Build status
 
