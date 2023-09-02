@@ -13,7 +13,7 @@
             var gridClass = GetBootstrapGridClass(Channels.Count);
             <div class="@gridClass">
                 <div class="stream-container">
-                    <iframe src=@($"{_ospUrl}view/{channel.channelEndpointID}/?embedded=True&autoplay=True")></iframe>
+                    <iframe src=@($"{_ospUrl}view/{channel.channelEndpointID}/?embedded=True&autoplay=True") allow="autoplay; fullscreen"></iframe>
                 </div>
             </div>
         }
