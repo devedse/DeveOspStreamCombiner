@@ -4,6 +4,17 @@ on: push
 
 jobs:
   generate_version_number:
+    permissions:
+      actions: none
+      checks: none
+      contents: none
+      deployments: none
+      issues: none
+      packages: none
+      pull-requests: none
+      repository-projects: write
+      security-events: none
+      statuses: none
     runs-on: ubuntu-latest
     outputs:
       build_number: ${{ github.ref == 'refs/heads/master' && steps.buildnumber.outputs.build_number || 1 }}
