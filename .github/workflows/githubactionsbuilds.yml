@@ -12,7 +12,7 @@ jobs:
       issues: none
       packages: none
       pull-requests: none
-      repository-projects: write
+      repository-projects: none
       security-events: none
       statuses: none
     runs-on: ubuntu-latest
